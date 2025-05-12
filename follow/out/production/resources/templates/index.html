@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>팔로우 테스트</title>
+    <script>
+        // 인증된 사용자의 이름을 가져오는 함수
+        function getAuthenticatedUser() {
+            return document.getElementById("authenticatedUser").value;
+        }
+
+        // 친구 팔로우 기능
+        function followUser() {
+            var friendName = document.getElementById("friendName").value;
+            var authenticatedUser = getAuthenticatedUser();
+
+            fetch(`/users/follow/${friendName}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    from_user: authenticatedUser,
+                    to_user: friendName
+                })
+            })
+            .then(response => response.json())
+            .then(data => alert('팔로우 성공'))
+            .catch(error => console.error('Error:', error));
+        }
+
+        // 팔로잉 리스트 조회
+        function getFollowingList() {
+            var authenticatedUser = getAuthenticatedUser();
+
+            fetch(`/users/${authenticatedUser}/following`)
+                .then(response => response.json())
+                .then(data => {
+                    var list = data.map(follow => `<li>${follow.name} (${follow.status})</li>`).join('');
+                    document.getElementById("followingList").innerHTML = list;
+                });
+        }
+
+        // 팔로워 리스트 조회
+        function getFollowerList() {
+            var authenticatedUser = getAuthenticatedUser();
+
+            fetch(`/users/${authenticatedUser}/follower`)
+                .then(response => response.json())
+                .then(data => {
+                    var list = data.map(follow => `<li>${follow.name} (${follow.status})</li>`).join('');
+                    document.getElementById("followerList").innerHTML = list;
+                });
+        }
+
+        // 언팔로우 기능
+        function deleteFollow() {
+            var friendName = document.getElementById("friendName").value;
+            var authenticatedUser = getAuthenticatedUser();
+
+            fetch(`/users/follow/${friendName}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.text())
+            .then(data => alert('팔로우 취소 성공'))
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
+</head>
+<body>
+<h1>팔로우 테스트 페이지</h1>
+
+<!-- 인증된 사용자 -->
+<input type="text" id="authenticatedUser" placeholder="인증된 사용자" /><br>
+
+<!-- 친구 이름 -->
+<input type="text" id="friendName" placeholder="팔로우할 친구 이름" /><br>
+
+<!-- 팔로우 버튼 -->
+<button onclick="followUser()">친구 팔로우</button><br>
+
+<!-- 팔로잉 리스트 조회 버튼 -->
+<button onclick="getFollowingList()">팔로잉 리스트 조회</button>
+<ul id="followingList"></ul>
+
+<!-- 팔로워 리스트 조회 버튼 -->
+<button onclick="getFollowerList()">팔로워 리스트 조회</button>
+<ul id="followerList"></ul>
+
+<!-- 언팔로우 버튼 -->
+<button onclick="deleteFollow()">친구 언팔로우</button><br>
+</body>
+</html>
