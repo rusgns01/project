@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>{{friend.name}}의 프로필</title>
+</head>
+<body>
+<h1>{{friend.name}}의 프로필</h1>
+<p>이메일: {{friend.email}}</p>
+<!-- 필요하다면 프로필 사진 등 추가 -->
+
+{{#isFollowing}}
+    <form action="/friends/profile/unfollow" method="post">
+        <input type="hidden" name="userId" value="{{friend.id}}">
+        <button type="submit">언팔로우</button>
+    </form>
+{{/isFollowing}}
+{{^isFollowing}}
+    <form action="/friends/profile/follow/{{userName}}" method="post">
+        <input type="hidden" name="action" value="follow">
+        <input type="hidden" name="toUserId" value="{{friend.id}}">
+        <button type="submit">팔로우</button>
+    </form>
+{{/isFollowing}}
+</body>
+</html>
