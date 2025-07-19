@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>게시글 목록</title>
+    <style>
+        .clickable {
+            cursor: pointer;
+            color: #0066cc;
+            text-decoration: underline;
+        }
+        .clickable:hover {
+            color: #003366;
+        }
+    </style>
+</head>
+<body>
+<h1>게시글 목록</h1>
+<a href="/write"><button>글쓰기</button></a>
+<table border="1" style="width:100%; margin-top:20px;">
+    <thead>
+    <tr>
+        <th>번호</th>
+        <th>저자</th>
+        <th>내용</th>
+    </tr>
+    </thead>
+    <tbody>
+    {{#posts}}
+        <tr>
+            <td>{{id}}</td>
+            <td>{{authorName}}</td>
+            <td>
+                <div class="clickable" onclick="viewPost({{id}})">
+                    <span>{{content}}</span>
+                </div>
+            </td>
+        </tr>
+    {{/posts}}
+    {{^posts}}
+        <tr>
+            <td colspan="3">등록된 글이 없습니다.</td>
+        </tr>
+    {{/posts}}
+    </tbody>
+</table>
+
+<script>
+    function viewPost(postId) {
+        window.location.href = '/posts/' + postId;
+    }
+</script>
+</body>
+</html>

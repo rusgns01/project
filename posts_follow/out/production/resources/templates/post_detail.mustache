@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>게시글 상세</title>
+</head>
+<body>
+<h1>게시글 상세</h1>
+<div>
+    <p><strong>번호:</strong> {{post.id}}</p>
+    <p><strong>제목:</strong> {{post.title}}</p>
+    <p><strong>저자:</strong> {{authorName}}</p>
+    <p><strong>내용:</strong> {{post.content}}</p>
+    <p><strong>작성일:</strong> {{post.createdAt}}</p>
+</div>
+<div>
+    <a href="/posts"><button>목록으로</button></a>
+
+    {{#isAuthorName}}
+        <!-- 작성자인 경우에만 수정/삭제 버튼 표시 -->
+        <a href="/posts/{{post.id}}/edit"><button>수정</button></a>
+        <button onclick="deletePost()">삭제</button>
+    {{/isAuthorName}}
+</div>
+
+<script>
+function deletePost() {
+    if (confirm('정말 삭제하시겠습니까?')) {
+        fetch('/posts/{{post.id}}', {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+        .then(response => {
+            if (response.ok) {
+                alert('게시글이 삭제되었습니다.');
+                window.location.href = '/posts';
+            } else if (response.status === 403) {
+                alert('삭제 권한이 없습니다.');
+            } else {
+                alert('삭제에 실패했습니다.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('삭제 중 오류가 발생했습니다.');
+        });
+    }
+}
+</script>
+</body>
+</html>

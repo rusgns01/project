@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>친구 페이지</title>
+</head>
+<body>
+<h1>친구 페이지</h1>
+
+<h2>내 친구 목록</h2>
+<ul>
+    {{#friends}}
+        <li>{{name}} ({{email}})</li>
+    {{/friends}}
+    {{^friends}}
+        <li>친구가 없습니다.</li>
+    {{/friends}}
+</ul>
+
+<h2>추천 친구</h2>
+<ul>
+    {{#recommendedFriends}}
+        <li>
+            {{name}} ({{email}})
+            {{#isMe}}
+                <span style="color:gray;">(나)</span>
+            {{/isMe}}
+            {{^isMe}}
+<!--                <form action="/friends/follow" method="post" style="display:inline;">-->
+<!--                    <input type="hidden" name="userId" value="{{id}}">-->
+<!--                    <button type="submit">팔로우</button>-->
+<!--                </form>-->
+                <!-- 친구정보 버튼 추가 -->
+                <form action="/friends/profile/{{name}}" method="get" style="display:inline;">
+                    <button type="submit">친구정보</button>
+                </form>
+            {{/isMe}}
+        </li>
+    {{/recommendedFriends}}
+    {{^recommendedFriends}}
+        <li>추천 친구가 없습니다.</li>
+    {{/recommendedFriends}}
+</ul>
+</body>
+</html>
